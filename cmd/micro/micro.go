@@ -9,8 +9,10 @@ import (
 	"github.com/gdamore/tcell"
 	"github.com/gdamore/tcell/encoding"
 	"github.com/go-errors/errors"
+	"github.com/layeh/gopher-luar"
 	"github.com/mattn/go-isatty"
 	"github.com/mitchellh/go-homedir"
+	"github.com/yuin/gopher-lua"
 )
 
 const (
@@ -41,6 +43,9 @@ var (
 
 	// Is the help screen open
 	helpOpen = false
+
+	// L is the lua state
+	L *lua.LState
 )
 
 // LoadInput loads the file input for the editor
@@ -175,6 +180,13 @@ func main() {
 		os.Exit(1)
 	}
 
+	L = lua.NewState()
+	defer L.Close()
+
+	if err := L.DoFile("plugin.lua"); err != nil {
+		panic(err)
+	}
+
 	encoding.Register()
 	tcell.SetEncodingFallback(tcell.EncodingFallbackASCII)
 
@@ -206,6 +218,10 @@ func main() {
 
 	messenger = new(Messenger)
 	view := NewView(buf)
+
+	L.SetGlobal("view", luar.New(L, view))
+	L.SetGlobal("settings", luar.New(L, &settings))
+	L.SetGlobal("messenger", luar.New(L, messenger))
 
 	for {
 		// Display everything
