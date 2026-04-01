@@ -238,6 +238,13 @@ func (b *Buffer) saveToFile(filename string, withSudo bool, autoSave bool) error
 		return errors.New("Cannot save scratch buffer")
 	}
 
+	if withSudo {
+		_, err := exec.LookPath(config.GlobalSettings["sucmd"].(string))
+		if err != nil {
+			return err
+		}
+	}
+
 	if !autoSave && b.Settings["rmtrailingws"].(bool) {
 		for i, l := range b.lines {
 			leftover := util.CharacterCount(bytes.TrimRightFunc(l.data, unicode.IsSpace))
