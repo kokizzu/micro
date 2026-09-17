@@ -290,6 +290,11 @@ func checkBackup(name string) error {
 }
 
 func exit(rc int) {
+	err := config.RunPluginFn("deinit")
+	if err != nil {
+		screen.TermMessage(err)
+	}
+
 	for _, b := range buffer.OpenBuffers {
 		if !b.Modified() {
 			b.Fini()
