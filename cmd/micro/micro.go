@@ -387,9 +387,6 @@ func main() {
 
 	defer func() {
 		if err := recover(); err != nil {
-			if screen.Screen != nil {
-				screen.Screen.Fini()
-			}
 			if e, ok := err.(*lua.ApiError); ok {
 				fmt.Println("Lua API error:", e)
 			} else {
