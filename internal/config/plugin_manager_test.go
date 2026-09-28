@@ -21,3 +21,11 @@ func TestNewPluginInfoAllowsJSON5Comments(t *testing.T) {
 		t.Fatalf("expected plugin name %q, got %q", "example", info.Name)
 	}
 }
+
+func TestNewPluginInfoRejectsMissingName(t *testing.T) {
+	for _, data := range []string{`[]`, `null`, `[{}]`, `[{"Description": "no name"}]`} {
+		if info, err := NewPluginInfo([]byte(data)); err != ErrMissingName {
+			t.Errorf("NewPluginInfo(%s) = %v, %v; want ErrMissingName", data, info, err)
+		}
+	}
+}

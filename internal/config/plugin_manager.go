@@ -38,6 +38,9 @@ func NewPluginInfo(data []byte) (*PluginInfo, error) {
 	if err := json5.Unmarshal(data, &info); err != nil {
 		return nil, err
 	}
+	if len(info) == 0 || info[0].Name == "" {
+		return nil, ErrMissingName
+	}
 
 	return &info[0], nil
 }
