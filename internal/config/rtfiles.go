@@ -247,16 +247,6 @@ func InitPlugins() {
 				for _, f := range srcs {
 					if strings.HasSuffix(f, ".lua") {
 						p.Srcs = append(p.Srcs, assetFile(filepath.Join(plugdir, d, f)))
-					} else if f == "repo.json" {
-						data, err := rt.Asset(filepath.Join(plugdir, d, f))
-						if err != nil {
-							continue
-						}
-						p.Info, err = NewPluginInfo(data)
-						if err != nil {
-							continue
-						}
-						p.Name = p.Info.Name
 					}
 				}
 				if !isID(p.Name) || len(p.Srcs) <= 0 {
