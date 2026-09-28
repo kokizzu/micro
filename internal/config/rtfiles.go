@@ -207,7 +207,7 @@ func InitPlugins() {
 			for _, f := range srcs {
 				if strings.HasSuffix(f.Name(), ".lua") {
 					p.Srcs = append(p.Srcs, realFile(filepath.Join(plugdir, d.Name(), f.Name())))
-				} else if strings.HasSuffix(f.Name(), ".json") {
+				} else if f.Name() == "repo.json" {
 					data, err := os.ReadFile(filepath.Join(plugdir, d.Name(), f.Name()))
 					if err != nil {
 						continue
@@ -247,7 +247,7 @@ func InitPlugins() {
 				for _, f := range srcs {
 					if strings.HasSuffix(f, ".lua") {
 						p.Srcs = append(p.Srcs, assetFile(filepath.Join(plugdir, d, f)))
-					} else if strings.HasSuffix(f, ".json") {
+					} else if f == "repo.json" {
 						data, err := rt.Asset(filepath.Join(plugdir, d, f))
 						if err != nil {
 							continue
